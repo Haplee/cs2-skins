@@ -5,14 +5,7 @@ Uses SQLite for simple, file-based storage.
 import sqlite3
 from datetime import datetime, timezone
 
-<<<<<<< HEAD
-import os
-
-# In a serverless environment like Vercel, only the /tmp directory is writable.
-DB_FILE = os.path.join("/tmp", "price_history.db")
-=======
 DB_FILE = "price_history.db"
->>>>>>> main
 
 def get_db_connection():
     """Establishes a connection to the SQLite database."""

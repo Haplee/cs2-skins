@@ -1,9 +1,4 @@
 import pytest
-<<<<<<< HEAD
-import os
-import database
-=======
->>>>>>> main
 from datetime import datetime, timedelta, timezone
 
 # Import the Flask app instance and the function to be tested
@@ -17,12 +12,9 @@ def client():
     with app.test_client() as client:
         yield client
 
-<<<<<<< HEAD
-=======
 import os
 import database
 
->>>>>>> main
 def test_analyze_item_trend():
     """
     Tests the trend analysis logic with a clean database.
