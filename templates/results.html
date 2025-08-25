@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resultados del Análisis - Steam Tracker</title>
+<<<<<<< HEAD
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #eee; background-color: #222; max-width: 800px; margin: 40px auto; padding: 20px; }
         h1, h2 { color: #00aaff; }
@@ -16,17 +17,33 @@
         a { color: #00aaff; text-decoration: none; }
         a:hover { text-decoration: underline; }
     </style>
+=======
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+>>>>>>> 1022739f36b1e3454cec8f00f64f595d3e9a7384
 </head>
 <body>
     <h1>Resultados del Análisis</h1>
     <p>Análisis para el inventario de <strong>{{ steam_id }}</strong>{% if use_test_data %} (usando datos de prueba){% endif %}.</p>
 
+<<<<<<< HEAD
+=======
+    {% if error_message %}
+        <div class="error-box">
+            <strong>¡Atención!</strong> {{ error_message }}
+        </div>
+    {% endif %}
+
+>>>>>>> 1022739f36b1e3454cec8f00f64f595d3e9a7384
     {% if items %}
         <table>
             <thead>
                 <tr>
                     <th>Artículo</th>
+<<<<<<< HEAD
                     <th>Precio Actual (Skinport)</th>
+=======
+                    <th>Precio Actual ({{ currency }})</th>
+>>>>>>> 1022739f36b1e3454cec8f00f64f595d3e9a7384
                     <th>Análisis de Tendencia</th>
                 </tr>
             </thead>

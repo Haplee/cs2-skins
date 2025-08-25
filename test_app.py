@@ -1,19 +1,19 @@
 import pytest
-from datetime import datetime, timedelta, timezone
+import os
+import database
 
 # Import the Flask app instance and the function to be tested
 from app import app
 from analysis import analyze_item_trend
 
+
 @pytest.fixture
 def client():
     """Create and configure a new app instance for each test."""
-    app.config['TESTING'] = True
+    app.config["TESTING"] = True
     with app.test_client() as client:
         yield client
 
-import os
-import database
 
 def test_analyze_item_trend():
     """
@@ -35,9 +35,10 @@ def test_index_route(client):
     """
     Tests the main page ('/') to ensure it loads successfully.
     """
-    response = client.get('/')
+    response = client.get("/")
     assert response.status_code == 200
     assert b"Steam Inventory Price Tracker" in response.data
+
 
 def test_track_route_test_mode(client, mocker):
     """
@@ -45,16 +46,22 @@ def test_track_route_test_mode(client, mocker):
     We use 'mocker' to prevent the real tracker.run_tracker from running.
     """
     # Mock the main tracker function to avoid long-running processes
-    mocker.patch('tracker.run_tracker', return_value=(
-        ["Item 1", "Item 2"],
-        {
-            "Item 1": {"current_price": 10.0, "trend": "Stable"},
-            "Item 2": {"current_price": 25.0, "trend": "High"}
-        }
-    ))
+    mocker.patch(
+        "tracker.run_tracker",
+        return_value=(
+            ["Item 1", "Item 2"],
+            {
+                "Item 1": {"current_price": 10.0, "trend": "Stable"},
+                "Item 2": {"current_price": 25.0, "trend": "High"},
+            },
+            None,  # The third return value is the error message, which is None in a success case
+        ),
+    )
 
-    response = client.post('/track', data={'use_test_data': 'true'})
+    response = client.post("/track", data={"use_test_data": "true"})
     assert response.status_code == 200
-    assert b"Resultados del An\xc3\xa1lisis" in response.data # "Resultados del Análisis"
+    assert (
+        b"Resultados del An\xc3\xa1lisis" in response.data
+    )  # "Resultados del Análisis"
     assert b"Item 1" in response.data
     assert b"Stable" in response.data

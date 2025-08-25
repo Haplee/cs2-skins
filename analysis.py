@@ -1,8 +1,10 @@
 """
 Performs analysis on the price history data.
 """
+
 from datetime import datetime, timedelta, timezone
 import database
+
 
 def get_price_history(item_name: str, days: int = 30) -> list[tuple]:
     """
@@ -20,14 +22,16 @@ def get_price_history(item_name: str, days: int = 30) -> list[tuple]:
 
     start_date = datetime.now(timezone.utc) - timedelta(days=days)
 
-    cursor.execute(
-        "SELECT timestamp, price FROM price_history WHERE item_name = ? AND timestamp >= ? ORDER BY timestamp ASC",
-        (item_name, start_date)
+    query = (
+        "SELECT timestamp, price FROM price_history "
+        "WHERE item_name = ? AND timestamp >= ? ORDER BY timestamp ASC"
     )
+    cursor.execute(query, (item_name, start_date))
 
     history = cursor.fetchall()
     conn.close()
-    return [(row['timestamp'], row['price']) for row in history]
+    return [(row["timestamp"], row["price"]) for row in history]
+
 
 def analyze_item_trend(item_name: str, current_price: float) -> str:
     """
@@ -61,21 +65,33 @@ def analyze_item_trend(item_name: str, current_price: float) -> str:
             last_7_days_prices.append(price)
 
     if not last_7_days_prices:
-        avg_price_7_days = avg_price_30_days # Fallback
+        avg_price_7_days = avg_price_30_days  # Fallback
     else:
         avg_price_7_days = sum(last_7_days_prices) / len(last_7_days_prices)
 
     # Simple trend logic
+    price_str = f"${current_price:.2f}"
+    avg_price_str = f"${avg_price_7_days:.2f}"
     if current_price > avg_price_7_days * 1.1:
-        trend = f"High: Current price (${current_price:.2f}) is >10% above 7-day average (${avg_price_7_days:.2f})."
+        trend = (
+            f"High: Current price ({price_str}) is >10% "
+            f"above 7-day average ({avg_price_str})."
+        )
     elif current_price < avg_price_7_days * 0.9:
-        trend = f"Low: Current price (${current_price:.2f}) is >10% below 7-day average (${avg_price_7_days:.2f})."
+        trend = (
+            f"Low: Current price ({price_str}) is >10% "
+            f"below 7-day average ({avg_price_str})."
+        )
     else:
-        trend = f"Stable: Current price (${current_price:.2f}) is within 10% of 7-day average (${avg_price_7_days:.2f})."
+        trend = (
+            f"Stable: Current price ({price_str}) is within 10% "
+            f"of 7-day average ({avg_price_str})."
+        )
 
     return trend
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     # Example usage (requires data in the database)
     print("Running analysis example...")
 
@@ -88,14 +104,35 @@ if __name__ == '__main__':
     item_to_test = "AK-47 | Redline (Field-Tested)"
 
     # Clear old test data
-    cursor.execute("DELETE FROM price_history WHERE item_name = ?", (item_to_test,))
+    cursor.execute(
+        "DELETE FROM price_history WHERE item_name = ?", (item_to_test,)
+    )
 
     dummy_data = [
-        (item_to_test, 'skinport', 50.0, datetime.now(timezone.utc) - timedelta(days=10)),
-        (item_to_test, 'skinport', 52.5, datetime.now(timezone.utc) - timedelta(days=5)),
-        (item_to_test, 'skinport', 51.0, datetime.now(timezone.utc) - timedelta(days=2)),
+        (
+            item_to_test,
+            "skinport",
+            50.0,
+            datetime.now(timezone.utc) - timedelta(days=10),
+        ),
+        (
+            item_to_test,
+            "skinport",
+            52.5,
+            datetime.now(timezone.utc) - timedelta(days=5),
+        ),
+        (
+            item_to_test,
+            "skinport",
+            51.0,
+            datetime.now(timezone.utc) - timedelta(days=2),
+        ),
     ]
-    cursor.executemany("INSERT INTO price_history (item_name, source, price, timestamp) VALUES (?, ?, ?, ?)", dummy_data)
+    query = (
+        "INSERT INTO price_history (item_name, source, price, timestamp) "
+        "VALUES (?, ?, ?, ?)"
+    )
+    cursor.executemany(query, dummy_data)
     conn.commit()
     conn.close()
 
@@ -104,12 +141,18 @@ if __name__ == '__main__':
     # Simulate a "current" price check
     current_market_price = 45.0
     analysis_result = analyze_item_trend(item_to_test, current_market_price)
-    print(f" -> Current Price: ${current_market_price:.2f} -> {analysis_result}")
+    print(
+        f" -> Current Price: ${current_market_price:.2f} -> {analysis_result}"
+    )
 
     current_market_price = 55.0
     analysis_result = analyze_item_trend(item_to_test, current_market_price)
-    print(f" -> Current Price: ${current_market_price:.2f} -> {analysis_result}")
+    print(
+        f" -> Current Price: ${current_market_price:.2f} -> {analysis_result}"
+    )
 
     current_market_price = 51.5
     analysis_result = analyze_item_trend(item_to_test, current_market_price)
-    print(f" -> Current Price: ${current_market_price:.2f} -> {analysis_result}")
+    print(
+        f" -> Current Price: ${current_market_price:.2f} -> {analysis_result}"
+    )
