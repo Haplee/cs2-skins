@@ -17,6 +17,7 @@
         a:hover { text-decoration: underline; }
     </style>
 </head>
+
     <style>
         .error-box { background-color: #dc3545; color: white; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
     </style>
@@ -24,6 +25,7 @@
 <body>
     <h1>Resultados del Análisis</h1>
     <p>Análisis para el inventario de <strong>{{ steam_id }}</strong>{% if use_test_data %} (usando datos de prueba){% endif %}.</p>
+
 
     {% if error_message %}
         <div class="error-box">

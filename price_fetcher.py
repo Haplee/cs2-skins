@@ -38,6 +38,7 @@ def get_prices_from_skinport(item_names: list[str]) -> dict[str, float]:
             for item in all_items
         }
 
+
         for item_name in item_names:
             if item_name in skinport_prices:
                 price = skinport_prices[item_name]
@@ -52,6 +53,7 @@ def get_prices_from_skinport(item_names: list[str]) -> dict[str, float]:
     except ValueError:
         print("Failed to decode JSON from Skinport API response.")
         return None
+
 
 
 def fetch_all_prices(item_names: list[str]) -> dict[str, dict[str, float]]:
@@ -74,6 +76,7 @@ def fetch_all_prices(item_names: list[str]) -> dict[str, dict[str, float]]:
     if skinport_prices is None:
         return None
 
+
     for item, price in skinport_prices.items():
         if item in all_prices:
             all_prices[item]["skinport"] = price
@@ -85,6 +88,7 @@ def fetch_all_prices(item_names: list[str]) -> dict[str, dict[str, float]]:
 
 
 if __name__ == "__main__":
+
     # Example Usage
     example_items = [
         "AK-47 | Redline (Field-Tested)",

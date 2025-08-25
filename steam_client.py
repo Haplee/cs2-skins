@@ -39,6 +39,7 @@ def get_inventory(steam_id: str, use_test_data: bool = False) -> list[str]:
 
         data = response.json()
 
+
         if data.get("success") == 1 and "descriptions" in data:
             # Create a mapping from classid_instanceid to market_hash_name
             descriptions = {
@@ -55,6 +56,7 @@ def get_inventory(steam_id: str, use_test_data: bool = False) -> list[str]:
 
             return market_hash_names
         else:
+
             print(
                 f"Failed to fetch inventory. Response: {data.get('error', 'No descriptions found')}"
             )
@@ -76,6 +78,7 @@ if __name__ == "__main__":
     example_steam_id = (
         "76561197960435530"  # A known public inventory for testing
     )
+
     print(f"Fetching inventory for SteamID: {example_steam_id}")
     inventory_items = get_inventory(example_steam_id)
     if inventory_items:
@@ -87,3 +90,4 @@ if __name__ == "__main__":
         print(
             "Could not fetch inventory. It might be private or the SteamID is invalid."
         )
+

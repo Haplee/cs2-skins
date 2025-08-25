@@ -17,7 +17,6 @@ import database
 import analysis
 import config
 
-
 def run_tracker(steam_id: str, use_test_data: bool = False):
     """
     Runs the full tracking and analysis process.
@@ -58,6 +57,7 @@ def run_tracker(steam_id: str, use_test_data: bool = False):
     print(
         f"\n[Step 3/4] Fetching current market prices for {len(unique_inventory_items)} unique items..."
     )
+
     current_prices = price_fetcher.fetch_all_prices(unique_inventory_items)
     error_message = None
 
@@ -68,6 +68,7 @@ def run_tracker(steam_id: str, use_test_data: bool = False):
             "El servicio puede estar temporalmente caído. Los precios históricos podrían seguir visibles."
         )
         current_prices = {}  # Use an empty dict to avoid further errors
+
     print("Price fetch complete.")
 
     # 4. Save the new price data to the database
@@ -92,6 +93,7 @@ def run_tracker(steam_id: str, use_test_data: bool = False):
         }
 
     print("\n--- Tracking Complete ---")
+
     return unique_inventory_items, analysis_results, error_message
 
 
@@ -111,6 +113,7 @@ if __name__ == "__main__":
                 result = results.get(item, {})
                 price = result.get("current_price")
                 trend = result.get("trend")
+
                 price_str = f"${price:.2f}" if price is not None else "N/A"
                 print(f"\n- {item}")
                 print(f"  > Current Price: {price_str}")

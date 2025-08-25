@@ -11,6 +11,7 @@ def index():
 
 
 @app.route("/track", methods=["POST"])
+
 def track():
     """
     Receives the form submission, runs the tracker,
@@ -34,6 +35,7 @@ def track():
     )
 
     return render_template(
+
         "results.html",
         items=items,
         results=results,

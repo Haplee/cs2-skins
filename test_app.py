@@ -6,7 +6,6 @@ import database
 from app import app
 from analysis import analyze_item_trend
 
-
 @pytest.fixture
 def client():
     """Create and configure a new app instance for each test."""
@@ -47,6 +46,7 @@ def test_track_route_test_mode(client, mocker):
     We use 'mocker' to prevent the real tracker.run_tracker from running.
     """
     # Mock the main tracker function to avoid long-running processes
+
     mocker.patch(
         "tracker.run_tracker",
         return_value=(
