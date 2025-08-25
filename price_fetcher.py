@@ -7,23 +7,29 @@ import requests
 SKINPORT_API_URL = "https://api.skinport.com/v1/items"
 
 
-def get_prices_from_skinport(item_names: list[str]) -> dict[str, float]:
+
+def get_prices_from_skinport(
+    item_names: list[str], currency: str = "USD"
+) -> dict[str, float] | None:
+
     """
     Fetches prices for a list of items from the Skinport API.
 
     Args:
         item_names: A list of 'market_hash_name' to look up.
+        currency: The currency for pricing (e.g., 'EUR', 'USD').
 
     Returns:
         A dictionary mapping item name to its suggested price.
-        Returns an empty dictionary if an error occurs.
+        Returns None if an error occurs.
     """
     prices = {}
-    print("Fetching prices from Skinport...")
+    print(f"Fetching prices from Skinport in {currency}...")
 
     try:
         # Skinport API returns all items, so we fetch once and then filter.
-        params = {"app_id": 730, "currency": "USD"}
+        params = {"app_id": 730, "currency": currency}
+
         headers = {"Accept-Encoding": "br"}
         response = requests.get(
             SKINPORT_API_URL, params=params, headers=headers
@@ -54,21 +60,26 @@ def get_prices_from_skinport(item_names: list[str]) -> dict[str, float]:
         return None
 
 
-def fetch_all_prices(item_names: list[str]) -> dict[str, dict[str, float]]:
+def fetch_all_prices(
+    item_names: list[str], currency: str = "USD"
+) -> dict[str, dict[str, float]] | None:
     """
     Fetches prices from all available sources for the given items.
 
     Args:
         item_names: A list of 'market_hash_name' to look up.
+        currency: The currency to fetch prices in.
 
     Returns:
         A dictionary where keys are item names and values are another
         dictionary mapping the source ('skinport', 'csfloat', etc.) to its price.
+        Returns None on failure.
     """
     all_prices = {item: {} for item in item_names}
 
     # --- Skinport ---
-    skinport_prices = get_prices_from_skinport(item_names)
+    skinport_prices = get_prices_from_skinport(item_names, currency=currency)
+
 
     # If the API call failed, propagate the failure signal
     if skinport_prices is None:
@@ -79,7 +90,7 @@ def fetch_all_prices(item_names: list[str]) -> dict[str, dict[str, float]]:
             all_prices[item]["skinport"] = price
 
     # --- Other sources would be called here ---
-    # e.g., csfloat_prices = get_prices_from_csfloat(item_names)
+    # e.g., csfloat_prices = get_prices_from_csfloat(item_names, currency)
 
     return all_prices
 
@@ -93,15 +104,18 @@ if __name__ == "__main__":
         "Non-existent Item 123",  # To test filtering
     ]
 
-    print(f"Fetching prices for {len(example_items)} items...")
-    retrieved_prices = fetch_all_prices(example_items)
+    print(f"Fetching prices for {len(example_items)} items in EUR...")
+    retrieved_prices = fetch_all_prices(example_items, currency="EUR")
 
-    print("\n--- Retrieved Prices ---")
-    for item, sources in retrieved_prices.items():
-        if sources:
-            print(f"- {item}:")
-            for source, price in sources.items():
-                print(f"  - {source}: ${price:.2f}")
-        else:
-            print(f"- {item}: Not found on any source.")
-    print("------------------------")
+    if retrieved_prices is not None:
+        print("\n--- Retrieved Prices (EUR) ---")
+        for item, sources in retrieved_prices.items():
+            if sources:
+                print(f"- {item}:")
+                for source, price in sources.items():
+                    print(f"  - {source}: €{price:.2f}")
+            else:
+                print(f"- {item}: Not found on any source.")
+        print("------------------------")
+    else:
+        print("Failed to retrieve prices.")

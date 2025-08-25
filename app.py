@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 import tracker
 
+
 app = Flask(__name__)
 
 
@@ -16,9 +17,11 @@ def track():
     Receives the form submission, runs the tracker,
     and renders the results page.
     """
+    # Get data from the form
     steam_id = request.form.get("steam_id")
-    # The checkbox will send 'true' if checked, otherwise it's None
     use_test_data = request.form.get("use_test_data") == "true"
+    currency = request.form.get("currency", "USD")
+    filter_tradable = request.form.get("filter_tradable") == "true"
 
     # If using test data, we don't need a real steam_id, but we pass one for consistency
     if use_test_data:
@@ -30,7 +33,12 @@ def track():
         steam_id_for_tracker = steam_id
 
     items, results, error = tracker.run_tracker(
-        steam_id_for_tracker, use_test_data
+
+        steam_id=steam_id_for_tracker,
+        use_test_data=use_test_data,
+        currency=currency,
+        filter_tradable=filter_tradable,
+
     )
 
     return render_template(
@@ -39,6 +47,8 @@ def track():
         results=results,
         steam_id=steam_id,
         use_test_data=use_test_data,
+
+        currency=currency,
         error_message=error,
     )
 
