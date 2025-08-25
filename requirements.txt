@@ -1,0 +1,6 @@
+requests
+brotli
+Flask
+pytest
+pytest-flask
+pytest-mock
