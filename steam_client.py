@@ -1,7 +1,9 @@
 """
 Handles fetching a user's Steam inventory.
 """
+
 import requests
+
 
 
 def get_inventory(
@@ -10,6 +12,7 @@ def get_inventory(
     filter_tradable: bool = False,
     filter_item_type: str = None,
 ) -> list[str]:
+
     """
     Fetches a user's CS2 inventory and returns a list of market_hash_names.
 
@@ -25,6 +28,7 @@ def get_inventory(
     """
     if use_test_data:
         print("[Debug] Using hardcoded test inventory data.")
+
         # This test data is assumed to be tradable and of various types
         test_items = [
             "AK-47 | Redline (Field-Tested)",  # Rifle
@@ -33,6 +37,7 @@ def get_inventory(
             "USP-S | Kill Confirmed (Field-Tested)",  # Pistol
             "★ Karambit | Doppler (Factory New)",  # Knife
             "Sticker | Natus Vincere (Holo) | Katowice 2014",  # Sticker
+
         ]
         if filter_item_type:
             return [
@@ -51,6 +56,7 @@ def get_inventory(
         response.raise_for_status()  # Raise an exception for bad status codes
 
         data = response.json()
+
 
         if data.get("success") != 1 or "descriptions" not in data:
             print(
@@ -115,7 +121,9 @@ def get_inventory(
 
 if __name__ == "__main__":
     # Example usage: Replace with a public inventory's SteamID for testing.
+
     example_steam_id = "76561197960435530"
+
     print(f"Fetching inventory for SteamID: {example_steam_id}")
 
     print("\n--- All Items ---")
@@ -125,6 +133,7 @@ if __name__ == "__main__":
         for item in inventory_items[:5]:
             print(f"- {item}")
     else:
+
         print("Could not fetch inventory.")
 
     print("\n--- Tradable Items Only ---")
@@ -144,3 +153,4 @@ if __name__ == "__main__":
             print(f"- {item}")
     else:
         print("No weapon items found or could not fetch inventory.")
+
