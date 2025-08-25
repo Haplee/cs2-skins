@@ -9,12 +9,14 @@ import analysis
 import config
 
 
+
 def run_tracker(
     steam_id: str,
     use_test_data: bool = False,
     currency: str = "USD",
     filter_tradable: bool = False,
 ):
+
     """
     Runs the full tracking and analysis process.
 
@@ -39,12 +41,16 @@ def run_tracker(
     # 2. Fetch Steam Inventory
     print(f"\n[Step 2/4] Fetching Steam Inventory for SteamID: {steam_id}...")
     inventory_items = steam_client.get_inventory(
+
         steam_id,
         use_test_data=use_test_data,
         filter_tradable=filter_tradable,
+
     )
     if not inventory_items:
-        print("Could not fetch inventory. It might be private or the SteamID is invalid.")
+        print(
+            "Could not fetch inventory. It might be private or the SteamID is invalid."
+        )
         return None, None, None
 
     unique_inventory_items = sorted(list(set(inventory_items)))
@@ -56,9 +62,11 @@ def run_tracker(
     print(
         f"\n[Step 3/4] Fetching current market prices for {len(unique_inventory_items)} unique items..."
     )
+
     current_prices = price_fetcher.fetch_all_prices(
         unique_inventory_items, currency=currency
     )
+
     error_message = None
 
     if current_prices is None:
@@ -78,6 +86,7 @@ def run_tracker(
     analysis_results = {}
     for item_name in unique_inventory_items:
         item_price_data = current_prices.get(item_name, {})
+
         current_price = item_price_data.get("skinport")  # Using skinport for analysis
 
         analysis_results[item_name] = {
@@ -85,6 +94,7 @@ def run_tracker(
             "trend": analysis.analyze_item_trend(item_name, current_price)
             if current_price is not None
             else "Price not available.",
+
         }
 
     print("\n--- Tracking Complete ---")
@@ -97,6 +107,8 @@ if __name__ == "__main__":
     try:
         # We still use the config for standalone runs
         steam_id_from_config, use_test_data_from_config = config.get_config()
+
         run_tracker(steam_id_from_config, use_test_data_from_config)
     except (ValueError) as e:
+
         print(f"Could not run standalone tracker: {e}")

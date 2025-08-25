@@ -1,14 +1,17 @@
 """
 Handles fetching item prices from various sources.
 """
+
 import requests
 
 SKINPORT_API_URL = "https://api.skinport.com/v1/items"
 
 
+
 def get_prices_from_skinport(
     item_names: list[str], currency: str = "USD"
 ) -> dict[str, float] | None:
+
     """
     Fetches prices for a list of items from the Skinport API.
 
@@ -26,6 +29,7 @@ def get_prices_from_skinport(
     try:
         # Skinport API returns all items, so we fetch once and then filter.
         params = {"app_id": 730, "currency": currency}
+
         headers = {"Accept-Encoding": "br"}
         response = requests.get(
             SKINPORT_API_URL, params=params, headers=headers
@@ -75,6 +79,7 @@ def fetch_all_prices(
 
     # --- Skinport ---
     skinport_prices = get_prices_from_skinport(item_names, currency=currency)
+
 
     # If the API call failed, propagate the failure signal
     if skinport_prices is None:

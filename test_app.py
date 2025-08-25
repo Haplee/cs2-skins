@@ -31,6 +31,7 @@ def test_analyze_item_trend():
         if os.path.exists(database.DB_FILE):
             os.remove(database.DB_FILE)
 
+
 def test_index_route(client):
     """
     Tests the main page ('/') to ensure it loads successfully.
