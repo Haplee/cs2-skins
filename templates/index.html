@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Steam Inventory Price Tracker</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #eee; background-color: #222; max-width: 800px; margin: 40px auto; padding: 20px; }
+        h1, h2 { color: #00aaff; }
+        form { background-color: #333; padding: 20px; border-radius: 8px; }
+        label { display: block; margin-bottom: 10px; }
+        input[type="text"] { width: 95%; padding: 10px; border-radius: 4px; border: 1px solid #555; background-color: #444; color: #eee; }
+        input[type="checkbox"] { margin-right: 10px; }
+        button { background-color: #00aaff; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        button:hover { background-color: #0088cc; }
+        .checkbox-label { display: inline-flex; align-items: center; margin-top: 15px; }
+        .loading { display: none; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Steam Inventory Price Tracker</h1>
+    <p>Introduce tu SteamID de 64 bits para obtener un análisis de los precios de tus skins de CS2. Tu inventario de Steam debe ser público.</p>
+
+    <form action="/track" method="post" onsubmit="showLoading()">
+        <label for="steam_id">Tu SteamID de 64 bits:</label>
+        <input type="text" id="steam_id" name="steam_id" placeholder="Ej: 76561197960435530" required>
+
+        <div class="checkbox-label">
+            <input type="checkbox" id="use_test_data" name="use_test_data" value="true">
+            <label for="use_test_data">Usar datos de inventario de prueba (ignora el SteamID)</label>
+        </div>
+
+        <br><br>
+        <button type="submit">Analizar Inventario</button>
+    </form>
+
+    <div id="loading" class="loading">
+        <h2>Analizando...</h2>
+        <p>Esto puede tardar un momento, especialmente la primera vez. Por favor, espera.</p>
+    </div>
+
+    <script>
+        function showLoading() {
+            document.getElementById('loading').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
