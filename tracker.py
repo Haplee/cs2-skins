@@ -59,9 +59,16 @@ def run_tracker(steam_id: str, use_test_data: bool = False):
     )
 
     current_prices = price_fetcher.fetch_all_prices(unique_inventory_items)
-    if not current_prices:
-        print("Could not fetch any price data.")
-        # We can still proceed to analysis with historical data if any
+    error_message = None
+
+    if current_prices is None:
+        print("Could not fetch price data from external APIs.")
+        error_message = (
+            "Error: No se pudieron obtener los datos de precios desde la API de Skinport. "
+            "El servicio puede estar temporalmente caído. Los precios históricos podrían seguir visibles."
+        )
+        current_prices = {}  # Use an empty dict to avoid further errors
+
     print("Price fetch complete.")
 
     # 4. Save the new price data to the database
@@ -86,7 +93,8 @@ def run_tracker(steam_id: str, use_test_data: bool = False):
         }
 
     print("\n--- Tracking Complete ---")
-    return unique_inventory_items, analysis_results
+
+    return unique_inventory_items, analysis_results, error_message
 
 
 if __name__ == "__main__":
@@ -103,7 +111,6 @@ if __name__ == "__main__":
             print("\n--- STANDALONE REPORT ---")
             for item in items:
                 result = results.get(item, {})
-
                 price = result.get("current_price")
                 trend = result.get("trend")
 

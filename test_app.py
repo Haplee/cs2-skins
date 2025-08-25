@@ -14,7 +14,6 @@ def client():
         yield client
 
 
-
 def test_analyze_item_trend():
     """
     Tests the trend analysis logic with a clean database.

@@ -87,7 +87,6 @@ if __name__ == "__main__":
         for item in inventory_items[:5]:
             print(f"- {item}")
     else:
-
         print(
             "Could not fetch inventory. It might be private or the SteamID is invalid."
         )

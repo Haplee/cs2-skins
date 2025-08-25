@@ -18,6 +18,7 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
+
 def create_tables():
     """Creates the necessary database tables if they don't exist."""
     conn = get_db_connection()
@@ -42,10 +43,10 @@ def create_tables():
         "CREATE INDEX IF NOT EXISTS idx_item_name ON price_history (item_name)"
     )
 
-
     conn.commit()
     conn.close()
     print("Database tables checked/created successfully.")
+
 
 def save_prices(price_data: dict[str, dict[str, float]]):
     """

@@ -48,7 +48,6 @@ if __name__ == "__main__":
         print(f"  SteamID: {steam_id}")
         print(f"  Use Test Inventory: {use_test}")
 
-
         # Clean up the dummy variables
         del os.environ["STEAM_ID"]
         del os.environ["USE_TEST_INVENTORY"]

@@ -30,7 +30,9 @@ def track():
             return "Error: SteamID is required if not using test data.", 400
         steam_id_for_tracker = steam_id
 
-    items, results = tracker.run_tracker(steam_id_for_tracker, use_test_data)
+    items, results, error = tracker.run_tracker(
+        steam_id_for_tracker, use_test_data
+    )
 
     return render_template(
 
@@ -39,6 +41,7 @@ def track():
         results=results,
         steam_id=steam_id,
         use_test_data=use_test_data,
+        error_message=error,
     )
 
 
