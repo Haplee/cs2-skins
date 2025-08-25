@@ -4,8 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resultados del Análisis - Steam Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #eee; background-color: #222; max-width: 800px; margin: 40px auto; padding: 20px; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            line-height: 1.6; 
+            color: #eee; 
+            background-color: #222; 
+            max-width: 800px; 
+            margin: 40px auto; 
+            padding: 20px; 
+        }
         h1, h2 { color: #00aaff; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         th, td { padding: 12px; border-bottom: 1px solid #444; text-align: left; }
@@ -15,9 +24,6 @@
         .stable { color: #ffc107; }
         a { color: #00aaff; text-decoration: none; }
         a:hover { text-decoration: underline; }
-    </style>
-</head>
-    <style>
         .error-box { background-color: #dc3545; color: white; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
     </style>
 </head>
@@ -31,14 +37,12 @@
         </div>
     {% endif %}
 
-
     {% if items %}
         <table>
             <thead>
                 <tr>
                     <th>Artículo</th>
                     <th>Precio Actual ({{ currency }})</th>
-
                     <th>Análisis de Tendencia</th>
                 </tr>
             </thead>
@@ -67,9 +71,9 @@
                 {% endfor %}
             </tbody>
         </table>
-    {% else %}
+    {% elif not error_message %}
         <h2>No se encontraron artículos.</h2>
-        <p>No se pudo obtener el inventario. Puede que el perfil sea privado o el SteamID sea incorrecto.</p>
+        <p>El inventario puede estar vacío, ser privado, o el SteamID es incorrecto.</p>
     {% endif %}
 
     <br>
