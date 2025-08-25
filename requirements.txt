@@ -4,8 +4,6 @@ Flask
 pytest
 pytest-flask
 pytest-mock
-<<<<<<< HEAD
-=======
 flake8
 black
->>>>>>> 1022739f36b1e3454cec8f00f64f595d3e9a7384
+

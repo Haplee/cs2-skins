@@ -44,8 +44,15 @@ def run_tracker(
         filter_tradable=filter_tradable,
     )
     if not inventory_items:
-        print("Could not fetch inventory. It might be private or the SteamID is invalid.")
-        return None, None, None
+        print(
+            "Could not fetch inventory or no items matched the filters."
+        )
+        # Return empty lists and a specific message
+        return (
+            [],
+            {},
+            "No se encontraron artículos en el inventario que coincidan con los filtros seleccionados (ej. 'solo intercambiables').",
+        )
 
     unique_inventory_items = sorted(list(set(inventory_items)))
     print(
