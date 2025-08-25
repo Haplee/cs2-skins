@@ -11,6 +11,7 @@ def index():
 
 
 @app.route("/track", methods=["POST"])
+
 def track():
     """
     Receives the form submission, runs the tracker,
@@ -32,6 +33,7 @@ def track():
     items, results = tracker.run_tracker(steam_id_for_tracker, use_test_data)
 
     return render_template(
+
         "results.html",
         items=items,
         results=results,

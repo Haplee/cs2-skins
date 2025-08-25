@@ -17,7 +17,6 @@ import database
 import analysis
 import config
 
-
 def run_tracker(steam_id: str, use_test_data: bool = False):
     """
     Runs the full tracking and analysis process.
@@ -58,6 +57,7 @@ def run_tracker(steam_id: str, use_test_data: bool = False):
     print(
         f"\n[Step 3/4] Fetching current market prices for {len(unique_inventory_items)} unique items..."
     )
+
     current_prices = price_fetcher.fetch_all_prices(unique_inventory_items)
     if not current_prices:
         print("Could not fetch any price data.")
@@ -103,8 +103,10 @@ if __name__ == "__main__":
             print("\n--- STANDALONE REPORT ---")
             for item in items:
                 result = results.get(item, {})
+
                 price = result.get("current_price")
                 trend = result.get("trend")
+
                 price_str = f"${price:.2f}" if price is not None else "N/A"
                 print(f"\n- {item}")
                 print(f"  > Current Price: {price_str}")

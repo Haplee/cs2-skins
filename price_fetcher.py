@@ -28,6 +28,7 @@ def get_prices_from_skinport(item_names: list[str]) -> dict[str, float]:
         response = requests.get(
             SKINPORT_API_URL, params=params, headers=headers
         )
+
         response.raise_for_status()
 
         all_items = response.json()
@@ -37,6 +38,7 @@ def get_prices_from_skinport(item_names: list[str]) -> dict[str, float]:
             item["market_hash_name"]: item.get("suggested_price")
             for item in all_items
         }
+
 
         for item_name in item_names:
             if item_name in skinport_prices:
@@ -73,6 +75,7 @@ def fetch_all_prices(item_names: list[str]) -> dict[str, dict[str, float]]:
         if item in all_prices:
             all_prices[item]["skinport"] = price
 
+
     # --- Other sources would be called here ---
     # e.g., csfloat_prices = get_prices_from_csfloat(item_names)
 
@@ -80,12 +83,14 @@ def fetch_all_prices(item_names: list[str]) -> dict[str, dict[str, float]]:
 
 
 if __name__ == "__main__":
+
     # Example Usage
     example_items = [
         "AK-47 | Redline (Field-Tested)",
         "AWP | Asiimov (Field-Tested)",
         "Glock-18 | Water Elemental (Minimal Wear)",
         "Non-existent Item 123",  # To test filtering
+
     ]
 
     print(f"Fetching prices for {len(example_items)} items...")
