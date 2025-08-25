@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados del Análisis - Steam Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Resultados del Análisis</h1>
+    <p>Análisis para el inventario de <strong>{{ steam_id }}</strong>{% if use_test_data %} (usando datos de prueba){% endif %}.</p>
+
+    {% if error_message %}
+        <div class="error-box">
+            <strong>¡Atención!</strong> {{ error_message }}
+        </div>
+    {% endif %}
+
+    {% if items %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Artículo</th>
+                    <th>Precio Actual ({{ currency }})</th>
+                    <th>Análisis de Tendencia</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                    {% set result = results[item] %}
+                    <tr>
+                        <td>{{ item }}</td>
+                        <td>
+                            {% if result.current_price is not none %}
+                                ${{ "%.2f"|format(result.current_price) }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if 'Low' in result.trend %}
+                                <span class="low">{{ result.trend }}</span>
+                            {% elif 'High' in result.trend %}
+                                <span class="high">{{ result.trend }}</span>
+                            {% else %}
+                                <span class="stable">{{ result.trend }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h2>No se encontraron artículos.</h2>
+        <p>No se pudo obtener el inventario. Puede que el perfil sea privado o el SteamID sea incorrecto.</p>
+    {% endif %}
+
+    <br>
+    <a href="/">← Volver a analizar</a>
+</body>
+</html>

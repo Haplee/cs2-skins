@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Steam Inventory Price Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Steam Inventory Price Tracker</h1>
+    <p>Introduce tu SteamID de 64 bits y selecciona tus opciones para analizar el valor de tu inventario de CS2. Tu inventario de Steam debe ser público.</p>
+
+    <form action="/track" method="post" onsubmit="showLoading()">
+        <div class="form-group">
+            <label for="steam_id">Tu SteamID de 64 bits:</label>
+            <input type="text" id="steam_id" name="steam_id" placeholder="Ej: 76561197960435530" required>
+        </div>
+
+        <div class="form-group">
+            <label for="currency">Selecciona tu Divisa:</label>
+            <select id="currency" name="currency">
+                <option value="USD">USD - Dólar estadounidense</option>
+                <option value="EUR">EUR - Euro</option>
+                <option value="GBP">GBP - Libra esterlina</option>
+                <option value="CAD">CAD - Dólar canadiense</option>
+                <option value="AUD">AUD - Dólar australiano</option>
+                <option value="BRL">BRL - Real brasileño</option>
+                <option value="CNY">CNY - Yuan chino</option>
+                <option value="RUB">RUB - Rublo ruso</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Opciones de Filtro:</label>
+            <div class="checkbox-label">
+                <input type="checkbox" id="filter_tradable" name="filter_tradable" value="true">
+                <label for="filter_tradable">Mostrar solo artículos intercambiables</label>
+            </div>
+            <div class="checkbox-label">
+                <input type="checkbox" id="use_test_data" name="use_test_data" value="true">
+                <label for="use_test_data">Usar datos de inventario de prueba (ignora el SteamID)</label>
+            </div>
+        </div>
+
+        <button type="submit">Analizar Inventario</button>
+    </form>
+
+    <div id="loading" class="loading">
+        <h2>Analizando...</h2>
+        <p>Esto puede tardar un momento, especialmente la primera vez. Por favor, espera.</p>
+    </div>
+
+    <script>
+        function showLoading() {
+            document.getElementById('loading').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
