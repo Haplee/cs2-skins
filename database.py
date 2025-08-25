@@ -2,10 +2,15 @@
 Handles all database operations for the price tracker.
 Uses SQLite for simple, file-based storage.
 """
+
 import sqlite3
 from datetime import datetime, timezone
+import os
 
-DB_FILE = "price_history.db"
+# In a serverless environment like Vercel, only the /tmp directory is writable.
+DB_FILE = os.path.join("/tmp", "price_history.db")
+
+
 
 def get_db_connection():
     """Establishes a connection to the SQLite database."""
@@ -19,7 +24,9 @@ def create_tables():
     cursor = conn.cursor()
 
     # Table to store price history
-    cursor.execute("""
+
+    cursor.execute(
+        """
         CREATE TABLE IF NOT EXISTS price_history (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             item_name TEXT NOT NULL,
@@ -27,10 +34,14 @@ def create_tables():
             price REAL NOT NULL,
             timestamp DATETIME NOT NULL
         )
-    """)
+    """
+    )
 
     # Create an index for faster lookups by item_name
-    cursor.execute("CREATE INDEX IF NOT EXISTS idx_item_name ON price_history (item_name)")
+    cursor.execute(
+        "CREATE INDEX IF NOT EXISTS idx_item_name ON price_history (item_name)"
+    )
+
 
     conn.commit()
     conn.close()
@@ -60,26 +71,27 @@ def save_prices(price_data: dict[str, dict[str, float]]):
 
     cursor.executemany(
         "INSERT INTO price_history (item_name, source, price, timestamp) VALUES (?, ?, ?, ?)",
-        records_to_insert
+        records_to_insert,
     )
 
     conn.commit()
     conn.close()
-    print(f"Successfully saved {len(records_to_insert)} price records to the database.")
 
-if __name__ == '__main__':
+    print(
+        f"Successfully saved {len(records_to_insert)} price records to the database."
+    )
+
+
+if __name__ == "__main__":
     # Example usage:
     print("Initializing database...")
     create_tables()
 
     # Example data similar to what price_fetcher.py would provide
     example_price_data = {
-        "AK-47 | Redline (Field-Tested)": {
-            "skinport": 49.19
-        },
-        "AWP | Asiimov (Field-Tested)": {
-            "skinport": 171.13
-        }
+
+        "AK-47 | Redline (Field-Tested)": {"skinport": 49.19},
+        "AWP | Asiimov (Field-Tested)": {"skinport": 171.13},
     }
 
     print("\nSaving example data...")
@@ -89,7 +101,10 @@ if __name__ == '__main__':
     print("\nVerifying saved data...")
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM price_history ORDER BY timestamp DESC LIMIT 2")
+
+    cursor.execute(
+        "SELECT * FROM price_history ORDER BY timestamp DESC LIMIT 2"
+    )
     rows = cursor.fetchall()
     for row in rows:
         print(dict(row))
