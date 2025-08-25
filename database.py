@@ -11,7 +11,6 @@ import os
 DB_FILE = os.path.join("/tmp", "price_history.db")
 
 
-
 def get_db_connection():
     """Establishes a connection to the SQLite database."""
     conn = sqlite3.connect(DB_FILE)
@@ -25,7 +24,6 @@ def create_tables():
     cursor = conn.cursor()
 
     # Table to store price history
-
     cursor.execute(
         """
         CREATE TABLE IF NOT EXISTS price_history (
@@ -77,7 +75,6 @@ def save_prices(price_data: dict[str, dict[str, float]]):
 
     conn.commit()
     conn.close()
-
     print(
         f"Successfully saved {len(records_to_insert)} price records to the database."
     )
@@ -90,7 +87,6 @@ if __name__ == "__main__":
 
     # Example data similar to what price_fetcher.py would provide
     example_price_data = {
-
         "AK-47 | Redline (Field-Tested)": {"skinport": 49.19},
         "AWP | Asiimov (Field-Tested)": {"skinport": 171.13},
     }
@@ -102,7 +98,6 @@ if __name__ == "__main__":
     print("\nVerifying saved data...")
     conn = get_db_connection()
     cursor = conn.cursor()
-
     cursor.execute(
         "SELECT * FROM price_history ORDER BY timestamp DESC LIMIT 2"
     )
