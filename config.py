@@ -43,6 +43,7 @@ if __name__ == "__main__":
         print("\nSetting dummy environment variables for testing...")
         os.environ["STEAM_ID"] = "76561197960435530"
         os.environ["USE_TEST_INVENTORY"] = "true"
+
         steam_id, use_test = get_config()
         print("Config read successfully:")
         print(f"  SteamID: {steam_id}")

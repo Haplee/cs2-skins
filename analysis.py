@@ -21,6 +21,7 @@ def get_price_history(item_name: str, days: int = 30) -> list[tuple]:
     cursor = conn.cursor()
 
     start_date = datetime.now(timezone.utc) - timedelta(days=days)
+
     query = (
         "SELECT timestamp, price FROM price_history "
         "WHERE item_name = ? AND timestamp >= ? ORDER BY timestamp ASC"
@@ -64,9 +65,7 @@ def analyze_item_trend(item_name: str, current_price: float) -> str:
             last_7_days_prices.append(price)
 
     if not last_7_days_prices:
-
         avg_price_7_days = avg_price_30_days  # Fallback
-
     else:
         avg_price_7_days = sum(last_7_days_prices) / len(last_7_days_prices)
 
@@ -142,7 +141,6 @@ if __name__ == "__main__":
     # Simulate a "current" price check
     current_market_price = 45.0
     analysis_result = analyze_item_trend(item_to_test, current_market_price)
-
     print(
         f" -> Current Price: ${current_market_price:.2f} -> {analysis_result}"
     )
@@ -158,4 +156,3 @@ if __name__ == "__main__":
     print(
         f" -> Current Price: ${current_market_price:.2f} -> {analysis_result}"
     )
-
